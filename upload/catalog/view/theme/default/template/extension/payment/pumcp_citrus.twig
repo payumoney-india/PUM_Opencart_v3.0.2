@@ -1,0 +1,88 @@
+
+<form name="citrusicp-form" id="citrusicp-form" method="POST">
+	<input type="hidden" name="citrusicp_payment_id" id="citrusicp_payment_id" />
+	<input type="hidden" name="merchant_order_id" id="order_id" value="{{ citrus_merchant_trans_id }}"/>
+	<input type="hidden" name="citrus_ret" id="citrus_ret" value=""/>
+	<div class="buttons">
+		<div class="pull-right">	
+			<input type="submit" value="{{ button_confirm }}" id="button-confirm" name="button-confirm" class="btn btn-primary" onclick='launchICP(); return false;'/>
+		</div>
+	</div>
+</form>
+			
+<script>
+	
+var sicp = document.createElement("script");
+sicp.id = "context";
+sicp.type = "text/javascript";
+sicp.src= "https://checkout-static.citruspay.com/kiwi/app-js/icp.min.js";
+{% if citrus_module == "Sandbox" %}
+sicp.src = "https://sboxcontext.citruspay.com/static/kiwi/app-js/icp.js";
+{% endif %}
+jQuery("head").append(sicp);
+		
+
+function launchICP() {
+	
+	if(typeof citrusICP == 'undefined') {
+		console.log("citrus script not loaded");
+		return false;
+	}
+	
+	var dataObj = {
+		orderAmount:"{{ total }}",
+		currency:"{{ currency }}",
+		phoneNumber:"{{ phone }}",
+		email:"{{ email }}",
+		merchantTxnId:"{{ citrus_merchant_trans_id }}",
+		secSignature:"{{ secSignature }}",
+		firstName:"{{ firstname }}",
+		lastName:"{{ lastname }}",
+		addressStreet1:"{{ addr1 }}",
+		addressCity:"{{ city }}",
+		addressState:"{{ state }}",
+		addressCountry:"{{ country }}",
+		addressZip:"{{ zip }}",
+		vanityUrl:"{{ citrus_vanityurl }}",
+		returnUrl:"{{ redir_url }}",
+		notifyUrl:"{{ notify_url }}",
+		mode:"dropAround"
+	};
+
+	//enable the submit order button				
+	//jQuery('#button-confirm').prop('disabled', false );	
+	
+	var configObj = {};
+	
+	configObj = {
+		{% if citrus_module == "Sandbox" %}
+		  icpUrl: 'https://sboxcontext.citruspay.com/kiwi/kiwi-popover',
+		{% endif %}		
+ 
+		eventHandler: function (cbObj) {				
+			if (cbObj.event === 'icpLaunched') {
+				console.log('Citrus ICP pop-up is launched');
+			} else if (cbObj.event === 'icpClosed') {
+				console.log(JSON.stringify(cbObj.message));				
+				console.log('Citrus ICP pop-up is closed');
+			}
+		} 
+	};
+
+		
+	try 
+	{
+		citrusICP.launchIcp(dataObj, configObj);
+	}
+	catch (error) 
+	{
+		console.log(error);
+	}
+}
+
+					
+//console.log('start timer');
+		
+//setTimeout(launchICP, 2000);
+		
+</script>
