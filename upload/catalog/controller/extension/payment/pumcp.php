@@ -146,7 +146,7 @@ class ControllerExtensionPaymentPumcp extends Controller {
 		 /////////////////////////////////////Start Payu Vital  Information /////////////////////////////////
 		
 		if($this->config->get('payment_pumcp_module')=='Sandbox')
-			$data['action'] = 'https://test.payu.in/_payment.php';
+			$data['action'] = 'https://sandboxsecure.payu.in/_payment.php';
 		else
 		    $data['action'] = 'https://secure.payu.in/_payment.php';
 			
@@ -240,7 +240,6 @@ class ControllerExtensionPaymentPumcp extends Controller {
 				$sentHashString = strtolower(hash('sha512', $saltString));
 			 	$responseHashString=$this->request->post['hash'];
 				
-				
 				$message = '';
 				$message .= 'orderId: ' . $this->request->post['txnid'] . "\n";
 				$message .= 'Transaction Id: ' . $this->request->post['mihpayid'] . "\n";
@@ -301,4 +300,5 @@ class ControllerExtensionPaymentPumcp extends Controller {
 		return $hmackey;
 	}	
 }
+?>
 ?>
