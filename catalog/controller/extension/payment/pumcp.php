@@ -240,6 +240,7 @@ class ControllerExtensionPaymentPumcp extends Controller {
 				$sentHashString = strtolower(hash('sha512', $saltString));
 			 	$responseHashString=$this->request->post['hash'];
 				
+				
 				$message = '';
 				$message .= 'orderId: ' . $this->request->post['txnid'] . "\n";
 				$message .= 'Transaction Id: ' . $this->request->post['mihpayid'] . "\n";
@@ -300,5 +301,4 @@ class ControllerExtensionPaymentPumcp extends Controller {
 		return $hmackey;
 	}	
 }
-?>
 ?>
