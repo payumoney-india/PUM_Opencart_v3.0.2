@@ -244,9 +244,9 @@ class ControllerExtensionPaymentPumcp extends Controller {
 				$message = '';
 				$message .= 'orderId: ' . $this->request->post['txnid'] . "\n";
 				$message .= 'Transaction Id: ' . $this->request->post['mihpayid'] . "\n";
-				foreach($this->request->post as $k => $val){
+				/*foreach($this->request->post as $k => $val){
 					$message .= $k.': ' . $val . "\n";
-				}
+				}*/
 					if($sentHashString==$this->request->post['hash']){
 							$this->model_checkout_order->addOrderHistory($this->request->post['txnid'], $this->config->get('payment_pumcp_order_status_id'), $message, true);
 							$data['continue'] = $this->url->link('checkout/success');
